@@ -1,0 +1,4 @@
+model: "openai/gpt-4.1-mini"
+dataset: "./datasets/json_schema_tasks_1000.jsonl"
+variants: ["user_only", "system_plus_user", "user_plus_assistant_seed"]
+sample_limit: 200

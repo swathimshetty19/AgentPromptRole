@@ -1,0 +1,5 @@
+model: "openai/gpt-4.1-mini"
+dataset: "./datasets/complex_schema_tasks_100.jsonl"
+variants: ["user_only", "system_plus_user", "user_plus_assistant_seed"]
+sample_limit: 100  # Test all 100 complex samples
+
