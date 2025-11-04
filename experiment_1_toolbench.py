@@ -167,6 +167,8 @@ def construct_prompt(task: EvaluationTask, condition_id: str) -> List:
         })
         messages.append({"role": "user", "content": task.query_text})
 
+    # Additional Prompt condition can be added here:
+    # elif condition_id == "C3" ... and so on.
     return messages
 
 
