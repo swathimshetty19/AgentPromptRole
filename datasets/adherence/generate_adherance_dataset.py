@@ -10,9 +10,9 @@ templates = [
             "properties": {
                 "name": {"type": "string"},
                 "age": {"type": "integer"},
-                "email": {"type": "string"}
+                "email": {"type": "string"},
             },
-            "required": ["name", "age", "email"]
+            "required": ["name", "age", "email"],
         },
         "example_inputs": [
             "Mark Lee, 41, mark@work.io",
@@ -25,7 +25,7 @@ templates = [
             "Lisa Anderson, 29, lisa.a@email.net",
             "Robert Taylor, 38, robert.t@work.com",
             "Amanda White, 26, amanda.w@email.com",
-        ]
+        ],
     },
     {
         "task_description": "Normalize a log entry.",
@@ -34,9 +34,9 @@ templates = [
             "properties": {
                 "timestamp": {"type": "string"},
                 "level": {"type": "string"},
-                "message": {"type": "string"}
+                "message": {"type": "string"},
             },
-            "required": ["timestamp", "level", "message"]
+            "required": ["timestamp", "level", "message"],
         },
         "example_inputs": [
             "2024-02-01 ERROR Disk full",
@@ -49,7 +49,7 @@ templates = [
             "2024-08-05 INFO User logged in",
             "2024-09-15 ERROR File not found",
             "2024-10-30 DEBUG Cache cleared",
-        ]
+        ],
     },
     {
         "task_description": "Convert product info into structured JSON.",
@@ -58,9 +58,9 @@ templates = [
             "properties": {
                 "product_name": {"type": "string"},
                 "price": {"type": "number"},
-                "currency": {"type": "string"}
+                "currency": {"type": "string"},
             },
-            "required": ["product_name", "price"]
+            "required": ["product_name", "price"],
         },
         "example_inputs": [
             "AirPods Pro, $249",
@@ -73,8 +73,8 @@ templates = [
             "Nintendo Switch, $299",
             "PlayStation 5, $499",
             "Xbox Series X, $499",
-        ]
-    }
+        ],
+    },
 ]
 
 # Generate 200 samples
@@ -82,19 +82,18 @@ samples = []
 for i in range(200):
     template = random.choice(templates)
     example_input = random.choice(template["example_inputs"])
-    
+
     sample = {
         "task_description": template["task_description"],
         "schema": template["schema"],
-        "example_input": example_input
+        "example_input": example_input,
     }
     samples.append(sample)
 
 # Write to file
-output_file = "json_schema_tasks_1000.jsonl"
+output_file = "json_schema_tasks.jsonl"
 with open(output_file, "w") as f:
     for sample in samples:
         f.write(json.dumps(sample) + "\n")
 
 print(f"✅ Generated {len(samples)} samples in {output_file}")
-

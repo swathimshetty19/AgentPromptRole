@@ -1,0 +1,28 @@
+config_version: 1.0
+experiment_name: "prompt_adherence"
+
+models:
+  - "openai/gpt-4.1-mini"
+  # You can add more models here if needed
+
+dataset:
+  loader: "json_schema"
+  path: "./datasets/adherence/json_schema_tasks.jsonl"
+  limit: 200
+
+  # input columns to the builder, in order
+  builder_inputs:
+    - task_description
+    - schema
+    - example_input
+
+  # input columns to the validator, in order (the LLM output will be the first input)
+  validator_inputs:
+    - schema
+
+builders:
+  - "adherence_user_only"
+  - "adherence_system_plus_user"
+  - "adherence_user_plus_assistant_seed"
+
+validator: "json_schema_validator"

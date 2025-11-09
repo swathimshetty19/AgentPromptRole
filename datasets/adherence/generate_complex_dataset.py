@@ -1,6 +1,7 @@
 """
 Generate a larger complex schema dataset by expanding the base templates
 """
+
 import json
 import random
 
@@ -17,20 +18,20 @@ base_templates = [
                     "properties": {
                         "street": {"type": "string"},
                         "city": {"type": "string"},
-                        "zipcode": {"type": "string"}
+                        "zipcode": {"type": "string"},
                     },
-                    "required": ["street", "city", "zipcode"]
-                }
+                    "required": ["street", "city", "zipcode"],
+                },
             },
-            "required": ["name", "age", "address"]
+            "required": ["name", "age", "address"],
         },
         "example_inputs": [
             "John Doe, 30, lives at 123 Main St, New York, NY 10001",
             "Alice Smith, 28, 456 Oak Ave, San Francisco, CA 94102",
             "Bob Johnson, 35, 789 Pine Rd, Seattle, WA 98101",
             "Carol White, 42, 321 Elm St, Boston, MA 02101",
-            "David Brown, 29, 654 Maple Dr, Austin, TX 78701"
-        ]
+            "David Brown, 29, 654 Maple Dr, Austin, TX 78701",
+        ],
     },
     {
         "task_description": "Parse a product catalog with nested product details.",
@@ -44,21 +45,21 @@ base_templates = [
                         "type": "object",
                         "properties": {
                             "name": {"type": "string"},
-                            "price": {"type": "number"}
+                            "price": {"type": "number"},
                         },
-                        "required": ["name", "price"]
-                    }
-                }
+                        "required": ["name", "price"],
+                    },
+                },
             },
-            "required": ["catalog_name", "products"]
+            "required": ["catalog_name", "products"],
         },
         "example_inputs": [
             "Electronics Catalog: iPhone 15 $999, MacBook Pro $1999, AirPods $249",
             "Books Catalog: Python Guide $29, JavaScript Mastery $35, Data Science $45",
             "Clothing Catalog: T-Shirt $20, Jeans $50, Jacket $80",
             "Food Catalog: Pizza $15, Burger $12, Salad $10",
-            "Tools Catalog: Hammer $25, Screwdriver $8, Wrench $15"
-        ]
+            "Tools Catalog: Hammer $25, Screwdriver $8, Wrench $15",
+        ],
     },
     {
         "task_description": "Extract order information with nested customer and items array.",
@@ -70,9 +71,9 @@ base_templates = [
                     "type": "object",
                     "properties": {
                         "name": {"type": "string"},
-                        "email": {"type": "string"}
+                        "email": {"type": "string"},
                     },
-                    "required": ["name", "email"]
+                    "required": ["name", "email"],
                 },
                 "items": {
                     "type": "array",
@@ -81,22 +82,22 @@ base_templates = [
                         "properties": {
                             "product": {"type": "string"},
                             "quantity": {"type": "integer"},
-                            "price": {"type": "number"}
+                            "price": {"type": "number"},
                         },
-                        "required": ["product", "quantity", "price"]
+                        "required": ["product", "quantity", "price"],
                     },
-                    "minItems": 1
-                }
+                    "minItems": 1,
+                },
             },
-            "required": ["order_id", "customer", "items"]
+            "required": ["order_id", "customer", "items"],
         },
         "example_inputs": [
             "Order #12345 for Alice Johnson (alice@email.com): 2x Laptop $1200 each, 1x Mouse $25",
             "Order #67890 for Bob Smith (bob@email.com): 3x Book $15 each, 2x Pen $3 each",
             "Order #11111 for Carol Lee (carol@email.com): 1x Phone $800, 1x Case $20",
             "Order #22222 for David Kim (david@email.com): 5x Shirt $25 each, 2x Pants $40 each",
-            "Order #33333 for Eve Brown (eve@email.com): 2x Headphones $100 each, 1x Cable $10"
-        ]
+            "Order #33333 for Eve Brown (eve@email.com): 2x Headphones $100 each, 1x Cable $10",
+        ],
     },
     {
         "task_description": "Extract event data with array of attendees and nested location.",
@@ -109,25 +110,25 @@ base_templates = [
                     "type": "object",
                     "properties": {
                         "venue": {"type": "string"},
-                        "address": {"type": "string"}
+                        "address": {"type": "string"},
                     },
-                    "required": ["venue", "address"]
+                    "required": ["venue", "address"],
                 },
                 "attendees": {
                     "type": "array",
                     "items": {"type": "string"},
-                    "minItems": 1
-                }
+                    "minItems": 1,
+                },
             },
-            "required": ["event_name", "date", "location", "attendees"]
+            "required": ["event_name", "date", "location", "attendees"],
         },
         "example_inputs": [
             "Conference 2024 on 2024-06-15 at Tech Center, 456 Tech Ave, attendees: Alice, Bob, Charlie",
             "Workshop on 2024-07-20 at Community Hall, 789 Main St, attendees: David, Eve, Frank",
             "Seminar on 2024-08-10 at University, 123 Campus Dr, attendees: Grace, Henry, Iris",
             "Meetup on 2024-09-05 at Coffee Shop, 321 Downtown Blvd, attendees: Jack, Kate, Leo",
-            "Summit on 2024-10-12 at Convention Center, 555 Expo Way, attendees: Mary, Nick, Olivia"
-        ]
+            "Summit on 2024-10-12 at Convention Center, 555 Expo Way, attendees: Mary, Nick, Olivia",
+        ],
     },
     {
         "task_description": "Extract user profile with array of hobbies and nested preferences.",
@@ -138,26 +139,26 @@ base_templates = [
                 "hobbies": {
                     "type": "array",
                     "items": {"type": "string"},
-                    "minItems": 2
+                    "minItems": 2,
                 },
                 "preferences": {
                     "type": "object",
                     "properties": {
                         "theme": {"type": "string"},
-                        "notifications": {"type": "boolean"}
+                        "notifications": {"type": "boolean"},
                     },
-                    "required": ["theme", "notifications"]
-                }
+                    "required": ["theme", "notifications"],
+                },
             },
-            "required": ["name", "hobbies", "preferences"]
+            "required": ["name", "hobbies", "preferences"],
         },
         "example_inputs": [
             "Sarah likes reading, hiking, and coding. Theme: dark, notifications: enabled",
             "Mike enjoys gaming, music, and cooking. Theme: light, notifications: disabled",
             "Lisa loves painting, yoga, and travel. Theme: auto, notifications: enabled",
             "Tom prefers sports, movies, and photography. Theme: dark, notifications: enabled",
-            "Anna enjoys reading, gardening, and writing. Theme: light, notifications: disabled"
-        ]
+            "Anna enjoys reading, gardening, and writing. Theme: light, notifications: disabled",
+        ],
     },
     {
         "task_description": "Parse transaction with nested sender/receiver and array of metadata.",
@@ -170,32 +171,29 @@ base_templates = [
                     "type": "object",
                     "properties": {
                         "account": {"type": "string"},
-                        "name": {"type": "string"}
+                        "name": {"type": "string"},
                     },
-                    "required": ["account", "name"]
+                    "required": ["account", "name"],
                 },
                 "receiver": {
                     "type": "object",
                     "properties": {
                         "account": {"type": "string"},
-                        "name": {"type": "string"}
+                        "name": {"type": "string"},
                     },
-                    "required": ["account", "name"]
+                    "required": ["account", "name"],
                 },
-                "metadata": {
-                    "type": "array",
-                    "items": {"type": "string"}
-                }
+                "metadata": {"type": "array", "items": {"type": "string"}},
             },
-            "required": ["transaction_id", "amount", "sender", "receiver", "metadata"]
+            "required": ["transaction_id", "amount", "sender", "receiver", "metadata"],
         },
         "example_inputs": [
             "TX#789 from Account 123 (John) to Account 456 (Jane), $500, tags: payment, urgent",
             "TX#101 from Account 789 (Bob) to Account 012 (Alice), $250, tags: transfer, monthly",
             "TX#202 from Account 345 (Carol) to Account 678 (David), $1000, tags: salary, auto",
             "TX#303 from Account 901 (Eve) to Account 234 (Frank), $75, tags: refund, processed",
-            "TX#404 from Account 567 (Grace) to Account 890 (Henry), $350, tags: payment, scheduled"
-        ]
+            "TX#404 from Account 567 (Grace) to Account 890 (Henry), $350, tags: payment, scheduled",
+        ],
     },
     {
         "task_description": "Extract log entry with nested context object and array of tags.",
@@ -209,25 +207,22 @@ base_templates = [
                     "type": "object",
                     "properties": {
                         "service": {"type": "string"},
-                        "version": {"type": "string"}
+                        "version": {"type": "string"},
                     },
-                    "required": ["service", "version"]
+                    "required": ["service", "version"],
                 },
-                "tags": {
-                    "type": "array",
-                    "items": {"type": "string"}
-                }
+                "tags": {"type": "array", "items": {"type": "string"}},
             },
-            "required": ["timestamp", "level", "message", "context", "tags"]
+            "required": ["timestamp", "level", "message", "context", "tags"],
         },
         "example_inputs": [
             "2024-03-15 10:30:00 ERROR Database connection failed, service: api, version: 2.1, tags: db, error, critical",
             "2024-04-20 14:15:00 INFO User login successful, service: auth, version: 1.5, tags: security, login, success",
             "2024-05-10 09:00:00 WARNING High memory usage detected, service: cache, version: 3.0, tags: performance, memory, warning",
             "2024-06-25 16:45:00 ERROR Payment processing failed, service: payment, version: 2.3, tags: payment, error, urgent",
-            "2024-07-30 11:20:00 DEBUG Cache hit rate 95%, service: cache, version: 3.0, tags: cache, performance, debug"
-        ]
-    }
+            "2024-07-30 11:20:00 DEBUG Cache hit rate 95%, service: cache, version: 3.0, tags: cache, performance, debug",
+        ],
+    },
 ]
 
 # Generate 100 samples
@@ -235,19 +230,18 @@ samples = []
 for i in range(100):
     template = random.choice(base_templates)
     example_input = random.choice(template["example_inputs"])
-    
+
     sample = {
         "task_description": template["task_description"],
         "schema": template["schema"],
-        "example_input": example_input
+        "example_input": example_input,
     }
     samples.append(sample)
 
 # Write to file
-output_file = "complex_schema_tasks_100.jsonl"
+output_file = "complex_schema_tasks.jsonl"
 with open(output_file, "w") as f:
     for sample in samples:
         f.write(json.dumps(sample) + "\n")
 
 print(f"✅ Generated {len(samples)} complex schema samples in {output_file}")
-

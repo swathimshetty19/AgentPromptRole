@@ -1,0 +1,28 @@
+from experiments.models.base_client import Message
+
+from experiments.builders.adherence import (
+    system_plus_user as adherence_system_plus_user,
+)
+from experiments.builders.adherence import user_only as adherence_user_only
+from experiments.builders.adherence import (
+    user_plus_assistant_seed as adherence_user_plus_assistant_seed,
+)
+
+type builder_type = callable[..., list[Message]]
+
+ALL_BUILDERS: dict[str, builder_type] = {
+    "adherence_user_only": adherence_user_only,
+    "adherence_system_plus_user": adherence_system_plus_user,
+    "adherence_user_plus_assistant_seed": adherence_user_plus_assistant_seed,
+}
+
+
+def get_builders(variants: list[str]) -> dict[str, builder_type]:
+    """Returns the requested builder variants."""
+    builders: dict[str, builder_type] = {}
+    for variant in variants:
+        if variant not in ALL_BUILDERS:
+            raise ValueError(f"Variant '{variant}' not recognized")
+        builders[variant] = ALL_BUILDERS[variant]
+
+    return builders
