@@ -1,7 +1,7 @@
 import os
 
 import requests
-
+import json
 from experiments.models.base_client import BaseClient, Message
 
 
@@ -11,7 +11,7 @@ class QwenCompatClient(BaseClient):
         self.api_key = os.getenv("QWEN_API_KEY")
         if not self.api_key:
             raise Exception("❌ QWEN_API_KEY not found in .env")
-        self.url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+        self.url = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions"
 
     def chat(self, messages: list[Message]) -> str:
         headers = {
@@ -26,4 +26,11 @@ class QwenCompatClient(BaseClient):
         if response.status_code != 200:
             raise Exception(f"Qwen API error {response.status_code}: {response.text}")
 
-        return response.json()["choices"][0]["message"]["content"]
+        result = response.json()
+        content = result["choices"][0]["message"]["content"]
+        
+        # Ensure it returns a string
+        if isinstance(content, list):
+            content = str(content)
+        
+        return str(content)
