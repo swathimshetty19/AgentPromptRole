@@ -3,6 +3,7 @@ experiment_name: "prompt_adherence"
 
 models:
   - "openai/gpt-4.1-mini"
+  - "qwen/qwen-turbo"
   # You can add more models here if needed
 
 dataset:

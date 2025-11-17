@@ -6,4 +6,6 @@ def get_client(model_name: str) -> BaseClient:
     """Returns a client instance for a given model name."""
     if model_name.startswith("openai"):
         return OpenAICompatClient(model_name)
+    if model_name.startswith("qwen"):
+        return QwenClient(model_name)
     raise ValueError(f"Unsupported model: {model_name}")
