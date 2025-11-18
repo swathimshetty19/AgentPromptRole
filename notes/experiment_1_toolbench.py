@@ -46,7 +46,7 @@ def get_llm_response(prompt: List, model_name: str) -> str:
         return f'{{"error": "API call failed: {str(e)}"}}'
 
 
-def generate_pydantic_model_from_schema(model_name: str, schema: Dict[str, Any]) -> Type[BaseModel]:
+def generate_pydantic_model_from_schema(model_name: str) -> Type[BaseModel]:
     "build pydantic schema for validator"
     class Parameter(BaseModel):
         name: str
@@ -118,7 +118,7 @@ def load_toolbench_g_tasks(instruction_file: str, num_samples: Optional[int] = N
                 continue
 
             model_name = f"{tool_name}_{api_name}_Model"
-            pydantic_model = generate_pydantic_model_from_schema(model_name, target_schema)
+            pydantic_model = generate_pydantic_model_from_schema(model_name)
 
             task = EvaluationTask(
                 query_id=query_id,
@@ -207,7 +207,7 @@ def validate_llm_output(output_str: str, pydantic_model: Type) -> Tuple[bool, st
 
 if __name__ == "__main__":
     # How to run the model.
-    INSTRUCTION_FILE_PATH = "datasets/toolbenc_test_instruction/G1_instruction.json"
+    INSTRUCTION_FILE_PATH = "../datasets/adherence/toolbenc_test_instruction/G1_instruction.json"
 
     NUM_SAMPLES = 100
     tasks = load_toolbench_g_tasks(INSTRUCTION_FILE_PATH, num_samples=NUM_SAMPLES)

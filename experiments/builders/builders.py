@@ -8,12 +8,20 @@ from experiments.builders.adherence import (
     user_plus_assistant_seed as adherence_user_plus_assistant_seed,
 )
 
+from experiments.builders.toolbench import (user_only as toolbench_user_only)
+from experiments.builders.toolbench import (system_plus_user as toolbench_system_plus_user)
+from experiments.builders.toolbench import (user_plus_assistant_seed as toolbench_user_plus_assistant_seed)
+
+
 type builder_type = callable[..., list[Message]]
 
 ALL_BUILDERS: dict[str, builder_type] = {
     "adherence_user_only": adherence_user_only,
     "adherence_system_plus_user": adherence_system_plus_user,
     "adherence_user_plus_assistant_seed": adherence_user_plus_assistant_seed,
+    "toolbench_user_only": toolbench_user_only,
+    "toolbench_system_plus_user": toolbench_system_plus_user,
+    "toolbench_user_plus_assistant_seed": toolbench_user_plus_assistant_seed
 }
 
 

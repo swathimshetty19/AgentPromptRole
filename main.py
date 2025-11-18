@@ -73,8 +73,11 @@ class ExperimentPipeline:
                         output = call_model_with_retry(client, messages)
 
                         valid: ValidatorOutput = self.validator(
-                            messages, *(data[col] for col in self.validator_inputs)
+                            output, *(data[col] for col in self.validator_inputs)
                         )
+
+                        print("===Validator===")
+                        print(valid)
                         f.write(
                             (
                                 f"{model},"
