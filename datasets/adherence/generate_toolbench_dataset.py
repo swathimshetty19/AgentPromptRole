@@ -1,12 +1,15 @@
+import json
 from pathlib import Path
 from typing import Optional
+
 from tqdm import tqdm
-import json
 
 TOOLBENCH_ROOT = "."
 
 
-def load_toolbench_g_tasks(instruction_file: str, dataset_name: str, num_samples: Optional[int] = None):
+def load_toolbench_g_tasks(
+    instruction_file: str, dataset_name: str, num_samples: Optional[int] = None
+):
     """Loads tasks from ToolBench G1 instruction JSON and builds schema-based Pydantic models."""
     print(f"Loading tasks from {instruction_file}...")
     tasks = []
@@ -31,9 +34,15 @@ def load_toolbench_g_tasks(instruction_file: str, dataset_name: str, num_samples
 
             tool_name, api_name = relevant_apis[0]
             target_schema = next(
-                (api for api in item["api_list"]
-                 if api["tool_name"] == tool_name and api["api_name"] == api_name and api["optional_parameters"] and api["required_parameters"]) ,
-                None
+                (
+                    api
+                    for api in item["api_list"]
+                    if api["tool_name"] == tool_name
+                    and api["api_name"] == api_name
+                    and api["optional_parameters"]
+                    and api["required_parameters"]
+                ),
+                None,
             )
             if not target_schema:
                 continue
@@ -48,7 +57,15 @@ def load_toolbench_g_tasks(instruction_file: str, dataset_name: str, num_samples
             #     api_schema_definition=target_schema,
             #     pydantic_model=pydantic_model,
             # )
-            tasks.append({"query_text": query_text, "query_id": query_id, "target_api_name": api_name, "api_schema_definition": target_schema, "model_name": model_name})
+            tasks.append(
+                {
+                    "query_text": query_text,
+                    "query_id": query_id,
+                    "target_api_name": api_name,
+                    "api_schema_definition": target_schema,
+                    "model_name": model_name,
+                }
+            )
 
         except Exception as e:
             print(f"Skipping task due to error: {e}")
@@ -65,4 +82,6 @@ def load_toolbench_g_tasks(instruction_file: str, dataset_name: str, num_samples
 
 
 # Generate Toolbench Dataset
-load_toolbench_g_tasks("toolbenc_test_instruction/G1_tool.json", "toolbench_instruction_200", 500)
+load_toolbench_g_tasks(
+    "toolbenc_test_instruction/G1_tool.json", "toolbench_instruction", 500
+)

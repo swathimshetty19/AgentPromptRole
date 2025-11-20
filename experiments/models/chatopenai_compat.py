@@ -1,16 +1,17 @@
 import os
 
 import requests
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI
 
 from experiments.models.base_client import BaseClient, Message
-from langchain_core.output_parsers import StrOutputParser
-from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+
 
 class ChatOpenAICompatClient(BaseClient):
     def __init__(self, model: str) -> None:
-        self.model = model
+        self.model = model.split("/")[-1]
         self.api_key = os.getenv("OPENAI_API_KEY")
         if not self.api_key:
             raise Exception("❌ OPENAI_API_KEY not found in .env")
@@ -18,17 +19,18 @@ class ChatOpenAICompatClient(BaseClient):
 
     def chat(self, messages) -> str:
         try:
-            model = ChatOpenAI(
-                model="gpt-4.1-mini",
-                temperature=0.0
-            )
+            model = ChatOpenAI(model=self.model, temperature=0.0)
 
             messages_prompt = []
             for message_dict in messages:
                 if message_dict["role"] == "system":
-                    messages_prompt.append(SystemMessage(content=message_dict["content"]))
+                    messages_prompt.append(
+                        SystemMessage(content=message_dict["content"])
+                    )
                 elif message_dict["role"] == "user":
-                    messages_prompt.append(HumanMessage(content=message_dict["content"]))
+                    messages_prompt.append(
+                        HumanMessage(content=message_dict["content"])
+                    )
                 elif message_dict["role"] == "assistant":
                     messages_prompt.append(AIMessage(content=message_dict["content"]))
 
