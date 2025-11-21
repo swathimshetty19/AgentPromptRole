@@ -82,7 +82,7 @@ class ExperimentPipeline:
                             (
                                 f"{model},"
                                 f"{builder_name},"
-                                f"\"{json.dumps(data).replace('\"', '\"\"')}\","
+                                f"\"{json.dumps(messages).replace('\"', '\"\"')}\","
                                 f"\"{output.replace('\"', '\"\"')}\","
                                 f"{valid.valid},"
                                 f"\"{valid.reason.replace('\"', '\"\"')}\","
