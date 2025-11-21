@@ -14,6 +14,7 @@ def load_toolbench_g_tasks(
     print(f"Loading tasks from {instruction_file}...")
     tasks = []
     full_path = Path(instruction_file)
+    print(full_path.resolve())
     if not full_path.exists():
         print(f"ERROR: Instruction file not found at {full_path}")
         return tasks
@@ -83,5 +84,5 @@ def load_toolbench_g_tasks(
 
 # Generate Toolbench Dataset
 load_toolbench_g_tasks(
-    "toolbenc_test_instruction/G1_tool.json", "toolbench_instruction", 500
+    "datasets/adherence/toolbenc_test_instruction/G1_tool.json", "toolbench_instruction", 500
 )

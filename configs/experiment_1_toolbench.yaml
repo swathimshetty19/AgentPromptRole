@@ -1,5 +1,5 @@
 config_version: 1.0
-experiment_name: "prompt_adherence"
+experiment_name: "prompt_toolbench"
 
 models:
   - "qwen-turbo"
@@ -21,6 +21,6 @@ dataset:
     - model_name
 
 builders:
-  - "toolbench_user_plus_assistant_seed"
+  - "toolbench_user_only"
 
 validator: "pydantic_schema_validator"
