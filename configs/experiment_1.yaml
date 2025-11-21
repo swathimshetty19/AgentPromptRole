@@ -2,7 +2,8 @@ config_version: 1.0
 experiment_name: "prompt_adherence"
 
 models:
-  - "chatopenai/gpt-4.1-mini-2025-04-14"
+  - "qwen-turbo"
+  #- "chatopenai/gpt-4.1-mini-2025-04-14"
   # You can add more models here if needed
 
 dataset:
