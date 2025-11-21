@@ -2,25 +2,26 @@ config_version: 1.0
 experiment_name: "prompt_toolbench"
 
 models:
-  - "qwen-turbo"
-  # You can add more models here if needed
+  - "chatopenai/gpt-4.1-mini-2025-04-14"
+  # You can add more models, or change here if needed
 
 dataset:
   loader: "json_schema"
-  path: "./datasets/adherence/toolbench_instruction.jsonl"
-  limit: 200
+  path: "./datasets/adherence/toolbench_tool.jsonl"
+  limit: 250
 
   # input columns to the builder, in order
   builder_inputs:
     - query_text
     - api_schema_definition
-    - target_api_name
 
   # input columns to the validator, in order (the LLM output will be the first input)
   validator_inputs:
-    - model_name
+    - api_schema_definition
 
 builders:
   - "toolbench_user_only"
+  - "toolbench_system_plus_user"
+  - "toolbench_user_plus_assistant_seed"
 
 validator: "pydantic_schema_validator"

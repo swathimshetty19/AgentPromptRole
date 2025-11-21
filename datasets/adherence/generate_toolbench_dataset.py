@@ -84,5 +84,5 @@ def load_toolbench_g_tasks(
 
 # Generate Toolbench Dataset
 load_toolbench_g_tasks(
-    "datasets/adherence/toolbenc_test_instruction/G1_tool.json", "toolbench_instruction", 500
+    "toolbenc_test_instruction/G3_instruction.json", "toolbench_instruction3", 500
 )
