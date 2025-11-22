@@ -3,6 +3,7 @@
 import json
 import sys
 import time
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -20,9 +21,52 @@ from experiments.validators.validators import get_validator
 load_dotenv()
 
 
-def call_model_with_retry(client: BaseClient, messages: list[Message]) -> str:
+def clean_qwen_tool_output(output: str) -> str:
     """
-    Call model with retry only for rate limits, not for content filtering
+    Clean Qwen's output to extract just the parameters from tool-calling wrapper.
+    
+    Qwen wraps outputs in:
+    {
+        "tool_name": "ToolName",
+        "parameters": { ... actual output ... }
+    }
+    
+    We need to extract just the parameters part.
+    """
+    if not output or output == "[CONTENT_FILTERED]":
+        return output
+    
+    try:
+        # Remove markdown code blocks if present
+        cleaned = output.strip()
+        cleaned = re.sub(r'^```(?:json)?\s*\n?', '', cleaned, flags=re.MULTILINE)
+        cleaned = re.sub(r'\n?```\s*$', '', cleaned, flags=re.MULTILINE)
+        
+        # Try to parse as JSON
+        data = json.loads(cleaned)
+        
+        # Check if it has the tool wrapper structure
+        if isinstance(data, dict):
+            # Check for different wrapper formats Qwen might use
+            if "parameters" in data and "tool_name" in data:
+                # Extract just the parameters
+                return json.dumps(data["parameters"])
+            elif "arguments" in data and "name" in data:
+                # Alternative format
+                return json.dumps(data["arguments"])
+            
+        # If no wrapper found, return as-is
+        return output
+        
+    except (json.JSONDecodeError, TypeError):
+        # If not valid JSON or can't process, return original
+        return output
+
+
+def call_model_with_retry(client: BaseClient, messages: list[Message], builder_name: str = None) -> str:
+    """
+    Call model with retry only for rate limits, not for content filtering.
+    Also cleans Qwen's tool-wrapped output.
     """
     tries = 3
     delay = 10
@@ -30,7 +74,15 @@ def call_model_with_retry(client: BaseClient, messages: list[Message]) -> str:
     
     for attempt in range(tries):
         try:
-            return client.chat(messages)
+            output = client.chat(messages)
+            
+            # Clean Qwen's output if it's from a builder that might trigger tool mode
+            # (typically when there's an assistant message in the context)
+            if builder_name and ("assistant" in builder_name.lower() or "plus" in builder_name.lower()):
+                output = clean_qwen_tool_output(output)
+            
+            return output
+            
         except Exception as e:
             error_str = str(e)
             
@@ -102,7 +154,9 @@ class ExperimentPipeline:
                     for data in pbar:
                         try:
                             messages = builder(*(data[col] for col in self.builder_inputs))
-                            output = call_model_with_retry(client, messages)
+                            
+                            # Pass builder_name to help identify when to clean output
+                            output = call_model_with_retry(client, messages, builder_name)
                             
                             # Check if content was filtered
                             if output is None:
@@ -123,6 +177,10 @@ class ExperimentPipeline:
                                 # Update progress bar with skip count
                                 pbar.set_postfix({"skipped": skipped_count})
                                 continue
+                            
+                            # Debug: Show what we're validating for problematic builders
+                            if "assistant" in builder_name.lower():
+                                print(f"\n  📝 Original output: {output[:100]}...")
                             
                             valid: ValidatorOutput = self.validator(
                                 output, *(data[col] for col in self.validator_inputs)

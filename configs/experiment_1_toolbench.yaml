@@ -8,7 +8,7 @@ models:
 
 dataset:
   loader: "json_schema"
-  path: "./datasets/adherence/toolbench_instruction3.jsonl"
+  path: "./datasets/adherence/toolbench_tool.jsonl"
   limit: 250
 
   # input columns to the builder, in order
