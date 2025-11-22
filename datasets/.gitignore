@@ -1,3 +1,4 @@
-adherence/json_schema_tasks.jsonl
-adherence/complex_schema_tasks.jsonl
-../outputs/toolbench_instruction.jsonl
+*.json
+*.jsonl
+
+!adherence/toolbenc_test_instruction/*
