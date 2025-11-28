@@ -182,27 +182,36 @@ class ExperimentPipeline:
                             if "assistant" in builder_name.lower():
                                 print(f"\n  📝 Original output: {output[:100]}...")
                             
-                            valid: ValidatorOutput = self.validator(
+                            valid = self.validator(
                                 output, *(data[col] for col in self.validator_inputs)
                             )
 
                             print("===Validator===")
                             print(valid)
-                            
+
+                            # Support both dict-based and object-based validators
+                            if isinstance(valid, dict):
+                                valid_flag = valid.get("valid", False)
+                                reason = valid.get("reason", "")
+                                metadata = valid.get("metadata", {})
+                            else:
+                                valid_flag = getattr(valid, "valid", False)
+                                reason = getattr(valid, "reason", "")
+                                metadata = getattr(valid, "metadata", {})
+
                             processed_count += 1
                             f.write(
                                 (
                                     f"{model},"
                                     f"{builder_name},"
                                     f"\"{json.dumps(messages).replace('\"', '\"\"')}\","
-                                    f"\"{output.replace('\"', '\"\"')}\","
-                                    f"{valid.valid},"
-                                    f"\"{valid.reason.replace('\"', '\"\"')}\","
-                                    f"\"{json.dumps(valid.metadata).replace('\"', '\"\"')}\"\n"
+                                    f"\"{(output or '').replace('\"', '\"\"')}\","
+                                    f"{valid_flag},"
+                                    f"\"{reason.replace('\"', '\"\"')}\","
+                                    f"\"{json.dumps(metadata).replace('\"', '\"\"')}\"\n"
                                 )
                             )
                             f.flush()
-                            
                         except Exception as e:
                             print(f"\n  ❌ Error processing sample: {e}")
                             # Log error and continue

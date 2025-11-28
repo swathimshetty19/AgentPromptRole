@@ -1,0 +1,28 @@
+config_version: 1.0
+
+experiment_name: multi_turn_simple_test
+
+# Models to test
+models:
+  - qwen-turbo  # Start with one model
+
+# Dataset configuration
+dataset:
+  loader: "json_schema"
+  path: "./datasets/adherence/toolbench_tool.jsonl"
+  limit: 250
+  
+  builder_inputs:
+    - query_text
+    - api_schema_definition
+  
+  validator_inputs:
+    - api_schema_definition
+
+builders:
+  - multi_turn_user_only
+  - multi_turn_user_with_assistant_markdown_history
+  - multi_turn_user_with_assistant_explanation_history
+
+# Use the existing toolbench validator
+validator: multi_inst_validator
