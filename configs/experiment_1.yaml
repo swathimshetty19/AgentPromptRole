@@ -2,7 +2,6 @@ config_version: 1.0
 experiment_name: "exp1_toolbench"
 
 models:
-  - "qwen-turbo"
   - "chatopenai/gpt-4.1-mini-2025-04-14"
   # You can add more models, or change here if needed
 
