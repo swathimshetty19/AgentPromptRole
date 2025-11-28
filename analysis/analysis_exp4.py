@@ -199,11 +199,11 @@ def plot_multi_turn_results(file_pattern: str):
     plt.tight_layout()
 
     os.makedirs("figures", exist_ok=True)
-    output_filename = "analysis/figures/multi_turn_experiment_comparison.png"
+    output_filename = "figures/multi_turn_experiment_comparison.png"
     plt.savefig(output_filename, dpi=300, bbox_inches="tight")
     print(f"\nComparison plot saved to {output_filename}")
 
 
 if __name__ == "__main__":
     # Adjust the pattern if your CSVs live elsewhere
-    plot_multi_turn_results("outputs/exp4/*.csv")
+    plot_multi_turn_results("../outputs/exp4/*.csv")
