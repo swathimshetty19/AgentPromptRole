@@ -4,7 +4,7 @@ experiment_name: multi_turn_simple_test
 
 # Models to test
 models:
-  - qwen-turbo  # Start with one model
+  - "chatopenai/gpt-4.1-mini-2025-04-14"
 
 # Dataset configuration
 dataset:

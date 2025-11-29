@@ -206,4 +206,4 @@ def plot_multi_turn_results(file_pattern: str):
 
 if __name__ == "__main__":
     # Adjust the pattern if your CSVs live elsewhere
-    plot_multi_turn_results("../outputs/exp4/*.csv")
+    plot_multi_turn_results("../outputs/exp3/*.csv")

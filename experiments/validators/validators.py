@@ -4,6 +4,7 @@ from experiments.validators.json_schema import (
     validate_json_with_pydantic,
 )
 from experiments.validators.multi_inst_validator import multi_inst_validator
+from experiments.validators.tool_agentic_validator import agentic_tool_validator
 
 
 def get_validator(validator: str) -> validator_type:
@@ -15,5 +16,7 @@ def get_validator(validator: str) -> validator_type:
         return validate_json_with_pydantic
     if validator == "multi_inst_validator":
         return multi_inst_validator
+    if validator == "agentic_tool_validator":
+        return agentic_tool_validator
 
     raise ValueError(f"Validator '{validator}' not recognized")
