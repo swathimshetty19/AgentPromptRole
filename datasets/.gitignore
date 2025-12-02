@@ -2,3 +2,4 @@
 *.jsonl
 
 !adherence/toolbenc_test_instruction/*
+!adversary/dev.json

@@ -1,0 +1,29 @@
+config_version: 1.0
+experiment_name: "exp2_adversary"
+
+models:
+  - "chatopenai/gpt-4.1-mini-2025-04-14"
+  # You can add more models, or change here if needed
+
+dataset:
+  loader: "adversarial_glue"
+  path: "./datasets/adversary/dev.json"
+  limit: 1000
+
+  # input columns to the builder, in order
+  builder_inputs:
+    - task
+    - input_1
+    - input_2
+
+  # input columns to the validator, in order (the LLM output will be the first input)
+  validator_inputs:
+    - task
+    - label
+
+builders:
+  - "adversary_user_only"
+  - "adversary_system_only"
+  - "adversary_system_plus_user"
+
+validator: "glue_validator"

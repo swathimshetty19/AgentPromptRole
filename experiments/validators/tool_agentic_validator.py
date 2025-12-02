@@ -7,6 +7,7 @@ from experiments.validators.base_validator import ValidatorOutput
 # helpers - unchanged from your implementation
 # -------------------------------------------------------
 
+
 def _extract_tool_from_dict(obj: Dict[str, Any]) -> str | None:
     """
     Extract a tool name from dict forms such as:
@@ -52,10 +53,8 @@ def _extract_tool_from_json_text(text: str) -> str | None:
 
     # Regex extraction (Tool: X)
     import re
-    m = re.search(
-        r"(?i)(?:tool|call|invoke|action)\s*:?\s*([A-Za-z0-9_\- ]+)",
-        text
-    )
+
+    m = re.search(r"(?i)(?:tool|call|invoke|action)\s*:?\s*([A-Za-z0-9_\- ]+)", text)
     if m:
         return m.group(1).strip()
 
@@ -70,6 +69,7 @@ def _extract_tool_from_json_text(text: str) -> str | None:
 # core validator logic (your function, unchanged)
 # -------------------------------------------------------
 
+
 def tool_name_validator(
     output: Any,
     expected_tool: str,
@@ -80,7 +80,7 @@ def tool_name_validator(
     metadata: Dict[str, Any] = {
         "parsed_tool": None,
         "parsed_by": None,
-        "raw_preview": None
+        "raw_preview": None,
     }
 
     # Case 1: Direct dict
@@ -113,7 +113,7 @@ def tool_name_validator(
 
     if not found:
         return ValidatorOutput(
-            valid=False,
+            is_valid=False,
             reason="No tool name could be parsed from model output",
             metadata=metadata,
         )
@@ -121,18 +121,26 @@ def tool_name_validator(
     found_norm = found.strip().lower()
 
     # done-case
-    if expected_norm in ("done", "finish", "finished", "complete") or expected_norm == "":
+    if (
+        expected_norm in ("done", "finish", "finished", "complete")
+        or expected_norm == ""
+    ):
         if found_norm in (
-            "done", "finish", "finished", "complete",
-            "no_action", "no_more", "no_more_actions"
+            "done",
+            "finish",
+            "finished",
+            "complete",
+            "no_action",
+            "no_more",
+            "no_more_actions",
         ):
             return ValidatorOutput(
-                valid=True,
+                is_valid=True,
                 reason="Correctly indicated done",
                 metadata=metadata,
             )
         return ValidatorOutput(
-            valid=False,
+            is_valid=False,
             reason=f"Expected done but model returned '{found}'",
             metadata=metadata,
         )
@@ -140,13 +148,13 @@ def tool_name_validator(
     # normal case
     if found_norm == expected_norm:
         return ValidatorOutput(
-            valid=True,
+            is_valid=True,
             reason=f"Model called expected tool '{expected_tool}'",
             metadata=metadata,
         )
 
     return ValidatorOutput(
-        valid=False,
+        is_valid=False,
         reason=f"Model called '{found}' but expected '{expected_tool}'",
         metadata=metadata,
     )
@@ -156,9 +164,9 @@ def tool_name_validator(
 # FINAL PUBLIC VALIDATOR ENTRYPOINT
 # -------------------------------------------------------
 
+
 def agentic_tool_validator(
-    output: Any,
-    api_schema_definition: Dict[str, Any]
+    output: Any, api_schema_definition: Dict[str, Any]
 ) -> ValidatorOutput:
     """
     FINAL validator used by main.py
@@ -174,9 +182,9 @@ def agentic_tool_validator(
 
     if not isinstance(api_schema_definition, dict):
         return ValidatorOutput(
-            valid=False,
+            is_valid=False,
             reason="api_schema_definition is not a dict",
-            metadata={"api_schema": str(api_schema_definition)}
+            metadata={"api_schema": str(api_schema_definition)},
         )
 
     # 🔥 The expected tool is directly from dataset

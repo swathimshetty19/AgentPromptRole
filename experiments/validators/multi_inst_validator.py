@@ -4,7 +4,6 @@ from typing import Any, Dict
 
 from experiments.validators.base_validator import ValidatorOutput  # type only
 
-
 SEED_PATTERN = re.compile(r"^__SEED_[A-Z0-9_]+__$")
 
 
@@ -61,19 +60,19 @@ def multi_inst_validator(
 
     raw = (output or "").strip()
     if not raw:
-        return {
-            "valid": False,
-            "reason": "Empty output",
-            "metadata": {"parsed_json": None, "error": "empty"},
-        }
+        return ValidatorOutput(
+            is_valid=False,
+            reason="Empty output",
+            metadata={"parsed_json": None, "error": "empty"},
+        )
 
     cleaned, parsed = _extract_json_object(raw)
     if cleaned is None:
-        return {
-            "valid": False,
-            "reason": "No JSON object found",
-            "metadata": {"parsed_json": None, "error": "no_json_object"},
-        }
+        return ValidatorOutput(
+            is_valid=False,
+            reason="No JSON object found",
+            metadata={"parsed_json": None, "error": "no_json_object"},
+        )
 
     # ---------- basic schema checks ----------
     required = [
@@ -95,18 +94,18 @@ def multi_inst_validator(
     metadata: Dict[str, Any] = {"parsed_json": parsed}
 
     if missing:
-        return {
-            "valid": False,
-            "reason": f"Missing required params: {missing}",
-            "metadata": metadata,
-        }
+        return ValidatorOutput(
+            is_valid=False,
+            reason=f"Missing required params: {missing}",
+            metadata=metadata,
+        )
 
     if unknown:
-        return {
-            "valid": False,
-            "reason": f"Unknown params: {unknown}",
-            "metadata": metadata,
-        }
+        return ValidatorOutput(
+            is_valid=False,
+            reason=f"Unknown params: {unknown}",
+            metadata=metadata,
+        )
 
     # ---------- seed-copy detection ----------
     copied_seed_params = []
@@ -120,15 +119,15 @@ def multi_inst_validator(
 
     if copied_seed_params:
         bad_names = [p["parameter"] for p in copied_seed_params]
-        return {
-            "valid": False,  # you can keep True and just rely on metadata if you prefer
-            "reason": f"Output copied assistant seed values for: {bad_names}",
-            "metadata": metadata,
-        }
+        return ValidatorOutput(
+            is_valid=False,  # you can keep True and just rely on metadata if you prefer
+            reason=f"Output copied assistant seed values for: {bad_names}",
+            metadata=metadata,
+        )
 
     # If we got here: structurally OK + did not reuse seed markers
-    return {
-        "valid": True,
-        "reason": "Valid JSON arguments for schema (no seed markers)",
-        "metadata": metadata,
-    }
+    return ValidatorOutput(
+        is_valid=True,
+        reason="Valid JSON arguments for schema (no seed markers)",
+        metadata=metadata,
+    )

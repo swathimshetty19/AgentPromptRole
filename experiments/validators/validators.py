@@ -1,4 +1,5 @@
 from experiments.validators.base_validator import validator_type
+from experiments.validators.glue_validator import validate_glue
 from experiments.validators.json_schema import (
     validate_json,
     validate_json_with_pydantic,
@@ -18,5 +19,7 @@ def get_validator(validator: str) -> validator_type:
         return multi_inst_validator
     if validator == "agentic_tool_validator":
         return agentic_tool_validator
+    if validator == "glue_validator":
+        return validate_glue
 
     raise ValueError(f"Validator '{validator}' not recognized")

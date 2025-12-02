@@ -1,9 +1,9 @@
 # usage: main.py <config_path>
 
 import json
+import re
 import sys
 import time
-import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -24,27 +24,27 @@ load_dotenv()
 def clean_qwen_tool_output(output: str) -> str:
     """
     Clean Qwen's output to extract just the parameters from tool-calling wrapper.
-    
+
     Qwen wraps outputs in:
     {
         "tool_name": "ToolName",
         "parameters": { ... actual output ... }
     }
-    
+
     We need to extract just the parameters part.
     """
     if not output or output == "[CONTENT_FILTERED]":
         return output
-    
+
     try:
         # Remove markdown code blocks if present
         cleaned = output.strip()
-        cleaned = re.sub(r'^```(?:json)?\s*\n?', '', cleaned, flags=re.MULTILINE)
-        cleaned = re.sub(r'\n?```\s*$', '', cleaned, flags=re.MULTILINE)
-        
+        cleaned = re.sub(r"^```(?:json)?\s*\n?", "", cleaned, flags=re.MULTILINE)
+        cleaned = re.sub(r"\n?```\s*$", "", cleaned, flags=re.MULTILINE)
+
         # Try to parse as JSON
         data = json.loads(cleaned)
-        
+
         # Check if it has the tool wrapper structure
         if isinstance(data, dict):
             # Check for different wrapper formats Qwen might use
@@ -54,16 +54,18 @@ def clean_qwen_tool_output(output: str) -> str:
             elif "arguments" in data and "name" in data:
                 # Alternative format
                 return json.dumps(data["arguments"])
-            
+
         # If no wrapper found, return as-is
         return output
-        
+
     except (json.JSONDecodeError, TypeError):
         # If not valid JSON or can't process, return original
         return output
 
 
-def call_model_with_retry(client: BaseClient, messages: list[Message], builder_name: str = None) -> str:
+def call_model_with_retry(
+    client: BaseClient, messages: list[Message], builder_name: str = None
+) -> str:
     """
     Call model with retry only for rate limits, not for content filtering.
     Also cleans Qwen's tool-wrapped output.
@@ -71,26 +73,31 @@ def call_model_with_retry(client: BaseClient, messages: list[Message], builder_n
     tries = 3
     delay = 10
     backoff = 3
-    
+
     for attempt in range(tries):
         try:
             output = client.chat(messages)
-            
+
             # Clean Qwen's output if it's from a builder that might trigger tool mode
             # (typically when there's an assistant message in the context)
-            if builder_name and ("assistant" in builder_name.lower() or "plus" in builder_name.lower()):
+            if builder_name and (
+                "assistant" in builder_name.lower() or "plus" in builder_name.lower()
+            ):
                 output = clean_qwen_tool_output(output)
-            
+
             return output
-            
+
         except Exception as e:
             error_str = str(e)
-            
+
             # Check for content filtering error - don't retry, return None
-            if "data_inspection_failed" in error_str or "inappropriate content" in error_str:
+            if (
+                "data_inspection_failed" in error_str
+                or "inappropriate content" in error_str
+            ):
                 print(f"\n  ⚠️ Content filtered by API, skipping this sample...")
                 return None  # Return None to indicate content was filtered
-            
+
             # Check for rate limit - retry
             if "429" in error_str:
                 if attempt < tries - 1:  # Don't sleep on last attempt
@@ -100,10 +107,10 @@ def call_model_with_retry(client: BaseClient, messages: list[Message], builder_n
                     continue
                 else:
                     raise e
-            
+
             # For other errors, raise immediately
             raise e
-    
+
     # Should not reach here, but just in case
     raise Exception("Max retries reached")
 
@@ -134,7 +141,7 @@ class ExperimentPipeline:
         output_dir = Path("outputs") / (experiment_name + ".csv")
         output_dir.parent.mkdir(exist_ok=True)
         print("Saving outputs to:", output_dir)
-        
+
         # Track statistics
         skipped_count = 0
         processed_count = 0
@@ -150,14 +157,18 @@ class ExperimentPipeline:
                         desc=f"{model:<22} {builder_name:<38}",
                         unit="sample",
                     )
-                    
+
                     for data in pbar:
                         try:
-                            messages = builder(*(data[col] for col in self.builder_inputs))
-                            
+                            messages = builder(
+                                *(data[col] for col in self.builder_inputs)
+                            )
+
                             # Pass builder_name to help identify when to clean output
-                            output = call_model_with_retry(client, messages, builder_name)
-                            
+                            output = call_model_with_retry(
+                                client, messages, builder_name
+                            )
+
                             # Check if content was filtered
                             if output is None:
                                 skipped_count += 1
@@ -167,9 +178,9 @@ class ExperimentPipeline:
                                         f"{model},"
                                         f"{builder_name},"
                                         f"\"{json.dumps(messages).replace('\"', '\"\"')}\","
-                                        f"\"[CONTENT_FILTERED]\","
+                                        f'"[CONTENT_FILTERED]",'
                                         f"False,"
-                                        f"\"Content filtered by API\","
+                                        f'"Content filtered by API",'
                                         f"\"{json.dumps({'content_filtered': True})}\"\n"
                                     )
                                 )
@@ -177,27 +188,22 @@ class ExperimentPipeline:
                                 # Update progress bar with skip count
                                 pbar.set_postfix({"skipped": skipped_count})
                                 continue
-                            
+
                             # Debug: Show what we're validating for problematic builders
                             if "assistant" in builder_name.lower():
                                 print(f"\n  📝 Original output: {output[:100]}...")
-                            
-                            valid = self.validator(
+
+                            valid: ValidatorOutput = self.validator(
                                 output, *(data[col] for col in self.validator_inputs)
                             )
 
-                            print("===Validator===")
-                            print(valid)
+                            if not valid["is_valid"]:
+                                print(valid)
 
                             # Support both dict-based and object-based validators
-                            if isinstance(valid, dict):
-                                valid_flag = valid.get("valid", False)
-                                reason = valid.get("reason", "")
-                                metadata = valid.get("metadata", {})
-                            else:
-                                valid_flag = getattr(valid, "valid", False)
-                                reason = getattr(valid, "reason", "")
-                                metadata = getattr(valid, "metadata", {})
+                            valid_flag = valid["is_valid"]
+                            reason = valid.get("reason", "")
+                            metadata = valid.get("metadata", {})
 
                             processed_count += 1
                             f.write(
@@ -213,22 +219,23 @@ class ExperimentPipeline:
                             )
                             f.flush()
                         except Exception as e:
+                            raise
                             print(f"\n  ❌ Error processing sample: {e}")
                             # Log error and continue
                             f.write(
                                 (
                                     f"{model},"
                                     f"{builder_name},"
-                                    f"\"ERROR\","
+                                    f'"ERROR",'
                                     f"\"ERROR: {str(e).replace('\"', '\"\"')}\","
                                     f"False,"
-                                    f"\"Processing error\","
+                                    f'"Processing error",'
                                     f"\"{json.dumps({'error': True})}\"\n"
                                 )
                             )
                             f.flush()
                             continue
-        
+
         print(f"\n✅ Experiment complete!")
         print(f"   Processed: {processed_count} samples")
         print(f"   Skipped (content filtered): {skipped_count} samples")

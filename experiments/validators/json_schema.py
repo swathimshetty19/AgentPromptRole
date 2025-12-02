@@ -1,13 +1,12 @@
 import json
 import re
-from typing import Any
 from types import SimpleNamespace
+from typing import Any, Dict, List, Literal, Optional, Tuple, Type, Union
 
 import jsonschema
+from pydantic import BaseModel, Field, ValidationError, create_model
 
 from experiments.validators.base_validator import ValidatorOutput
-from pydantic import BaseModel, create_model, ValidationError, Field
-from typing import List, Dict, Any, Optional, Tuple, Type, Union, Literal
 
 # Type mapping
 TYPE_MAPPING = {
@@ -16,7 +15,7 @@ TYPE_MAPPING = {
     "NUMBER": float,
     "BOOLEAN": bool,
     "ARRAY": list,
-    "OBJECT": dict
+    "OBJECT": dict,
 }
 
 
@@ -39,12 +38,16 @@ def generate_dynamic_model(schema_def: Dict[str, Any]) -> Type[BaseModel]:
         p_type = _get_python_type(param.get("type", "STRING"))
         description = param.get("description", "")
 
-        model_fields[p_name] = (Optional[p_type], Field(default=None, description=description))
+        model_fields[p_name] = (
+            Optional[p_type],
+            Field(default=None, description=description),
+        )
 
     model_name = schema_def.get("api_name", "DynamicToolModel")
     DynamicModel = create_model(model_name, **model_fields)
 
     return DynamicModel
+
 
 def validate_json_with_pydantic(output: str, api_schema_definition) -> ValidatorOutput:
 
@@ -110,10 +113,8 @@ def validate_json_with_pydantic(output: str, api_schema_definition) -> Validator
         # pydantic_model.model_validate(data)
         validated_obj = pydantic_model.model_validate(data)
 
-
-        # Return SimpleNamespace with attributes expected by caller
-        return SimpleNamespace(
-            valid=True,
+        return ValidatorOutput(
+            is_valid=True,
             reason="",
             metadata={
                 "extraneous_text_pct": extraneous_pct,
@@ -149,8 +150,8 @@ def validate_json_with_pydantic(output: str, api_schema_definition) -> Validator
         except:
             extraneous_pct = 100
 
-        return SimpleNamespace(
-            valid=False,
+        return ValidatorOutput(
+            is_valid=False,
             reason=str(e),
             metadata={
                 "extraneous_text_pct": extraneous_pct,
@@ -212,9 +213,8 @@ def validate_json(output: Any, schema: dict[str, Any]) -> ValidatorOutput:
         data = json.loads(json_only)
         jsonschema.validate(data, schema)
 
-        # Return SimpleNamespace with attributes expected by caller
-        return SimpleNamespace(
-            valid=True,
+        return ValidatorOutput(
+            is_valid=True,
             reason="",
             metadata={
                 "extraneous_text_pct": extraneous_pct,
@@ -250,8 +250,8 @@ def validate_json(output: Any, schema: dict[str, Any]) -> ValidatorOutput:
         except:
             extraneous_pct = 100
 
-        return SimpleNamespace(
-            valid=False,
+        return ValidatorOutput(
+            is_valid=False,
             reason=str(e),
             metadata={
                 "extraneous_text_pct": extraneous_pct,
