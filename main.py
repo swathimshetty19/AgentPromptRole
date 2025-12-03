@@ -173,11 +173,12 @@ class ExperimentPipeline:
                             if output is None:
                                 skipped_count += 1
                                 # Write a row indicating this was skipped
+                                messages_str = json.dumps(messages).replace('"', '""')
                                 f.write(
                                     (
                                         f"{model},"
                                         f"{builder_name},"
-                                        f"\"{json.dumps(messages).replace('\"', '\"\"')}\","
+                                        f"\"{messages_str}\","
                                         f'"[CONTENT_FILTERED]",'
                                         f"False,"
                                         f'"Content filtered by API",'
@@ -206,15 +207,19 @@ class ExperimentPipeline:
                             metadata = valid.get("metadata", {})
 
                             processed_count += 1
+                            messages_str = json.dumps(messages).replace('"', '""')
+                            output_str = (output or '').replace('"', '""')
+                            reason_str = reason.replace('"', '""')
+                            metadata_str = json.dumps(metadata).replace('"', '""')
                             f.write(
                                 (
                                     f"{model},"
                                     f"{builder_name},"
-                                    f"\"{json.dumps(messages).replace('\"', '\"\"')}\","
-                                    f"\"{(output or '').replace('\"', '\"\"')}\","
+                                    f"\"{messages_str}\","
+                                    f"\"{output_str}\","
                                     f"{valid_flag},"
-                                    f"\"{reason.replace('\"', '\"\"')}\","
-                                    f"\"{json.dumps(metadata).replace('\"', '\"\"')}\"\n"
+                                    f"\"{reason_str}\","
+                                    f"\"{metadata_str}\"\n"
                                 )
                             )
                             f.flush()
@@ -222,12 +227,13 @@ class ExperimentPipeline:
                             raise
                             print(f"\n  ❌ Error processing sample: {e}")
                             # Log error and continue
+                            error_str = str(e).replace('"', '""')
                             f.write(
                                 (
                                     f"{model},"
                                     f"{builder_name},"
                                     f'"ERROR",'
-                                    f"\"ERROR: {str(e).replace('\"', '\"\"')}\","
+                                    f"\"ERROR: {error_str}\","
                                     f"False,"
                                     f'"Processing error",'
                                     f"\"{json.dumps({'error': True})}\"\n"

@@ -23,9 +23,10 @@ from experiments.builders.tool_agentic_builder import (
     agent_chain_assistant_style,
     agent_chain_tools,
 )
+from typing import Callable
 from experiments.models.base_client import Message
 
-type builder_type = callable[..., list[Message]]
+builder_type = Callable[..., list[Message]]
 
 # NOTE: add new builders here
 ALL_BUILDERS: dict[str, builder_type] = {

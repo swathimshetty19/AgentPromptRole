@@ -3,12 +3,13 @@ experiment_name: "exp4_toolagent"
 
 models:
   - "chatopenai/gpt-4.1-mini-2025-04-14"
+  - "qwen/qwen-turbo"
   # You can add more models, or change here if needed
 
 dataset:
   loader: "json_schema"
   path: "./datasets/adherence/toolbench_tool_with_prior.jsonl"
-  limit: 250
+  # limit: 250  # Using full dataset (1100 samples)
 
   # input columns to the builder, in order
   builder_inputs:
@@ -21,5 +22,6 @@ dataset:
 
 builders:
   - "agent_chain_tools"
+  - "agent_chain_assistant_style"
 
 validator: "agentic_tool_validator"

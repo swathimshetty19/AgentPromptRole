@@ -1,13 +1,13 @@
 import json
 import re
-from typing import Any, Dict
+from typing import Any, Dict, Optional, Tuple
 
 from experiments.validators.base_validator import ValidatorOutput  # type only
 
 SEED_PATTERN = re.compile(r"^__SEED_[A-Z0-9_]+__$")
 
 
-def _extract_json_object(raw: str) -> tuple[str | None, Dict[str, Any]]:
+def _extract_json_object(raw: str) -> Tuple[Optional[str], Dict[str, Any]]:
     """Try to extract a single JSON object from the raw model output."""
     if raw is None:
         return None, {}

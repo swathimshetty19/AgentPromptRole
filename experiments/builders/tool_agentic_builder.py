@@ -124,7 +124,7 @@ def agent_chain_tools(
         messages.append({"role": "assistant", "content": f"Memory Update: tool_called={tool_name}"})
 
     # final assistant prompt: ask for the next tool name
-    messages.append({"role": "assistant", "content": "Current State: given the above tool calls, provide the NEXT tool name to call. Only reply with the tool name (or a tiny JSON like {\"tool\":\"ToolName\"})."})
+    messages.append({"role": "assistant", "content": "Current State: given the above tool calls, provide the NEXT tool name to call.\n\nIMPORTANT: Reply with ONLY the tool name. You can use one of these formats:\n- Plain text: \"ToolName\"\n- Simple JSON: {\"tool\":\"ToolName\"}\n\nDo NOT include parameters, arguments, or any other fields. Only the tool name is needed."})
     return messages
 
 
