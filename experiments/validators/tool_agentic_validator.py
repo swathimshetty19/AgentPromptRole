@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from experiments.validators.base_validator import ValidatorOutput
 
@@ -8,7 +8,7 @@ from experiments.validators.base_validator import ValidatorOutput
 # -------------------------------------------------------
 
 
-def _extract_tool_from_dict(obj: Dict[str, Any]) -> str | None:
+def _extract_tool_from_dict(obj: Dict[str, Any]) -> Optional[str]:
     """
     Extract a tool name from dict forms such as:
     {
@@ -32,7 +32,7 @@ def _extract_tool_from_dict(obj: Dict[str, Any]) -> str | None:
     return None
 
 
-def _extract_tool_from_json_text(text: str) -> str | None:
+def _extract_tool_from_json_text(text: str) -> Optional[str]:
     """
     Try:
     1. JSON parse

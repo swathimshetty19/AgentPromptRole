@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Callable
 
 from typing_extensions import TypedDict
 
@@ -9,4 +9,4 @@ class ValidatorOutput(TypedDict):
     metadata: dict[str, Any]
 
 
-type validator_type = callable[[str, ...], ValidatorOutput]
+validator_type = Callable[[str, ...], ValidatorOutput]

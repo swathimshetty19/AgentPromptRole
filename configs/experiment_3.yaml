@@ -3,6 +3,7 @@ experiment_name: "exp4_toolagent"
 
 models:
   - "chatopenai/gpt-4.1-mini-2025-04-14"
+  - "qwen/qwen-turbo"
   # You can add more models, or change here if needed
 
 dataset:
