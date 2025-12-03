@@ -108,8 +108,8 @@ def validate_json_with_pydantic(output: str, api_schema_definition) -> Validator
         # - Are all required fields present?
         # - Are the types correct (e.g. int is int)?
         data = json.loads(json_only)
-        print("===DATA===")
-        print(data)
+        # print("===DATA===")
+        # print(data)
         # pydantic_model.model_validate(data)
         validated_obj = pydantic_model.model_validate(data)
 
