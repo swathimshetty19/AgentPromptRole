@@ -1,4 +1,3 @@
-import csv
 import glob
 import json
 import os
@@ -30,7 +29,7 @@ def parse_builder_name(builder_str: str):
 
     # 2. remove leading boilerplate tokens
     drop_prefixes = {
-        "adversary",
+        "toolbench",
     }
     parts = [p for p in parts if p not in drop_prefixes]
 
@@ -202,145 +201,11 @@ def plot_multi_turn_results(file_pattern: str):
     plt.tight_layout()
 
     os.makedirs("figures", exist_ok=True)
-    output_filename = "figures/experiment_2_benchmark_comparison.png"
+    output_filename = "figures/experiment_1_benchmark_comparison.png"
     plt.savefig(output_filename, dpi=300, bbox_inches="tight")
     print(f"\nComparison plot saved to {output_filename}")
 
 
-def analyze_summary():
-    map = {
-        "You are a precise recognizing textual entailment to": "RTE",
-        "You are a precise natural language inference t": "MNLI",
-        "You are a precise question-answer entailm": "QNLI",
-        "You are a precise question paraphrase dete": "QQP",
-        "You are a precise sentence sentimental": "SST",
-    }
-    builder_map = {
-        "adversary_user_only": "User Only",
-        "adversary_system_only": "System Only",
-        "adversary_system_plus_user": "System Plus User",
-    }
-    count = {"SST": 0, "QQP": 0, "QNLI": 0, "MNLI": 0, "RTE": 0}
-    results = {
-        "User Only": count.copy(),
-        "System Only": count.copy(),
-        "System Plus User": count.copy(),
-    }
-
-    data = {"SST": [], "QQP": [], "QNLI": [], "MNLI": [], "RTE": []}
-
-    with open("../outputs/exp2/exp2_adversary_2025-12-01-21-46-35.csv", "r") as f:
-        reader = csv.reader(f)
-        next(reader)
-        for row in reader:
-            for key, task in map.items():
-                builder = builder_map[row[1]]
-                if key in row[2]:
-                    data[task].append(row)
-                    if row[4][0] == "T":
-                        count[task] += 1
-                        results[builder][task] += 1
-                    break
-
-    results_ratio = {
-        k: {task: 3 * cnt / len(data[task]) for task, cnt in results[k].items()}
-        for k in results
-    }
-
-    # Plot
-    sns.set_theme(style="whitegrid", context="talk")
-
-    df = pd.DataFrame(results_ratio)
-    print(df)
-    tasks = df.index.tolist()
-    prompts = df.columns.tolist()
-
-    # Dynamic figure size
-    fig, axes = plt.subplots(
-        nrows=len(prompts),
-        ncols=len(tasks),
-        figsize=(7 * len(tasks), len(prompts)),
-        sharey=False,  # We don't share Y because we want to enforce order per plot
-        sharex=True,
-    )
-    for i, prompt in enumerate(prompts):
-        for j, task in enumerate(tasks):
-            ax = axes[i][j]
-
-            # Single number for that (prompt, task)
-            pass_val = df.loc[task, prompt] * 100
-            fail_val = 100 - pass_val
-
-            subset = pd.DataFrame({"Fail Rate": [fail_val], "Pass Rate": [pass_val]})
-
-            subset[["Fail Rate", "Pass Rate"]].plot(
-                kind="barh",
-                stacked=True,
-                ax=ax,
-                color=["#e74c3c", "#2ecc71"],
-                width=0.6,
-                edgecolor="white",
-                legend=False,
-            )
-            ax.set_xlim(0, 100)
-
-            if i == 0:
-                ax.set_title(f"{task}", fontsize=18, fontweight="bold", pad=20)
-
-            ax.set_xlabel("")
-            ax.set_ylabel("")
-            ax.xaxis.set_ticklabels([])
-            ax.yaxis.set_ticklabels([])
-            ax.yaxis.label.set_rotation(0)
-
-            if j == 0:
-                ax.set_ylabel(
-                    prompt,
-                    fontsize=8,
-                    fontweight="bold",
-                    labelpad=25,
-                    position=(0.5, 0.5),
-                )
-
-            ax.set_xlim(0, 100)
-            sns.despine(left=True, bottom=True)
-
-            # Add percentage labels
-            for container in ax.containers:
-                # Only label if the value exists and > 0
-                labels = []
-                for val in container.datavalues:
-                    if pd.isna(val) or val < 5:  # Don't label tiny or missing bars
-                        labels.append("")
-                    else:
-                        labels.append(f"{val:.1f}%")
-                ax.bar_label(
-                    container,
-                    labels=labels,
-                    label_type="center",
-                    color="white",
-                    fontsize=11,
-                    fontweight="bold",
-                )
-
-    # Global Legend
-    handles, labels = axes[0][0].get_legend_handles_labels()
-    if handles:
-        fig.legend(
-            handles,
-            ["Fail", "Pass"],
-            loc="lower center",
-            bbox_to_anchor=(0.5, -0.05),
-            ncol=2,
-            frameon=False,
-        )
-
-    plt.tight_layout()
-
-    output_filename = "figures/experiment_2_builder_comparison_gpt.png"
-    plt.savefig(output_filename, dpi=300, bbox_inches="tight")
-    print(f"Comparison plot saved to {output_filename}")
-
-
-plot_multi_turn_results("../outputs/exp2/*.csv")
-analyze_summary()
+if __name__ == "__main__":
+    # Adjust the pattern if your CSVs live elsewhere
+    plot_multi_turn_results("../outputs/exp1/*.csv")
