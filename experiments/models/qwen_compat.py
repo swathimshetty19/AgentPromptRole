@@ -21,7 +21,7 @@ class QwenCompatClient(BaseClient):
             "X-Title": "Role-Adherence-Experiment",
         }
 
-        body = {"model": self.model, "messages": messages}
+        body = {"model": self.model, "messages": messages, "max_tokens": 200}
 
         response = requests.post(self.url, json=body, headers=headers)
 

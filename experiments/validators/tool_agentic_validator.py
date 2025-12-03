@@ -25,42 +25,110 @@ def _extract_tool_from_dict(obj: Dict[str, Any]) -> Optional[str]:
         "action": "X",
         "tool": "X"
     }
+    Also handles nested structures and filters out placeholder values.
     """
+    # First, try direct keys
     for key in ("tool_name", "name", "action", "tool"):
-        if key in obj and isinstance(obj[key], str):
-            return obj[key]
+        if key in obj:
+            value = obj[key]
+            if isinstance(value, str) and value.strip():
+                value = value.strip()
+                # Skip placeholder values
+                if value != "_name" and not value.startswith("_"):
+                    return value
+    
+    # Try nested structures (e.g., {"arguments": {"tool_name": "X"}})
+    for key in ("arguments", "parameters", "params", "data"):
+        if key in obj and isinstance(obj[key], dict):
+            nested_result = _extract_tool_from_dict(obj[key])
+            if nested_result:
+                return nested_result
+    
+    # Try to find any string value that looks like a tool name
+    # (longer strings, contains spaces/hyphens, not just single words)
+    for key, value in obj.items():
+        if isinstance(value, str) and len(value) > 3:
+            # Skip if it's clearly a parameter value (too long, contains URLs, etc.)
+            if "http" not in value.lower() and len(value) < 100:
+                # Check if it looks like a tool name (has spaces, hyphens, or is a reasonable length)
+                if " " in value or "-" in value or (len(value) > 5 and value.replace(" ", "").replace("-", "").isalnum()):
+                    if value != "_name" and not value.startswith("_"):
+                        return value.strip()
+    
     return None
 
 
 def _extract_tool_from_json_text(text: str) -> Optional[str]:
     """
     Try:
-    1. JSON parse
-    2. Fallback regex
-    3. Keyword heuristics
+    1. Clean markdown code blocks
+    2. JSON parse (single or multiple JSON objects)
+    3. Extract from nested structures
+    4. Fallback regex
+    5. Keyword heuristics
     """
+    import re
+    
+    text = text.strip()
+    
+    # Remove markdown code blocks if present
+    text = re.sub(r"^```(?:json)?\s*\n?", "", text, flags=re.MULTILINE)
+    text = re.sub(r"\n?```\s*$", "", text, flags=re.MULTILINE)
     text = text.strip()
 
-    # Try JSON first
+    # Try parsing as JSON (handle single or multiple JSON objects)
     try:
+        # Try parsing the whole text
         parsed = json.loads(text)
         if isinstance(parsed, dict):
-            return _extract_tool_from_dict(parsed)
+            result = _extract_tool_from_dict(parsed)
+            if result:
+                return result
         if isinstance(parsed, list) and parsed and isinstance(parsed[0], dict):
-            return _extract_tool_from_dict(parsed[0])
-    except Exception:
-        pass
+            result = _extract_tool_from_dict(parsed[0])
+            if result:
+                return result
+    except json.JSONDecodeError:
+        # Try to find and parse first JSON object in text
+        json_match = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', text)
+        if json_match:
+            try:
+                parsed = json.loads(json_match.group(0))
+                if isinstance(parsed, dict):
+                    result = _extract_tool_from_dict(parsed)
+                    if result:
+                        return result
+            except Exception:
+                pass
 
-    # Regex extraction (Tool: X)
-    import re
+    # Handle cases where GPT outputs full parameter JSON - try to find tool_name in nested structures
+    # Look for patterns like {"tool_name": "...", ...} or {"name": "...", ...}
+    tool_name_patterns = [
+        r'"tool_name"\s*:\s*"([^"]+)"',
+        r'"name"\s*:\s*"([^"]+)"',
+        r'"tool"\s*:\s*"([^"]+)"',
+        r'"action"\s*:\s*"([^"]+)"',
+    ]
+    for pattern in tool_name_patterns:
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            tool_name = match.group(1).strip()
+            # Skip if it's a generic placeholder like "_name"
+            if tool_name and tool_name != "_name" and not tool_name.startswith("_"):
+                return tool_name
 
+    # Regex extraction (Tool: X or just tool name)
     m = re.search(r"(?i)(?:tool|call|invoke|action)\s*:?\s*([A-Za-z0-9_\- ]+)", text)
     if m:
-        return m.group(1).strip()
+        tool_name = m.group(1).strip()
+        if tool_name != "_name" and not tool_name.startswith("_"):
+            return tool_name
 
-    # If output is literally the tool name
-    if len(text.split()) <= 3:
-        return text.strip()
+    # If output looks like just a tool name (short, no special chars except spaces/hyphens)
+    if len(text.split()) <= 5 and re.match(r'^[A-Za-z0-9_\- ]+$', text):
+        # Skip if it's a placeholder
+        if text != "_name" and not text.startswith("_"):
+            return text.strip()
 
     return None
 

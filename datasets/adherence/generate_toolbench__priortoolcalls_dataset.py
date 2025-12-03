@@ -172,7 +172,7 @@ if __name__ == "__main__":
             "G3_instruction.json",
         ],
         "toolbench_tool_with_prior",
-        num_samples=500,
+        num_samples=None,  # Generate full dataset
         done_probability=0.5,
         seed=42,
     )
