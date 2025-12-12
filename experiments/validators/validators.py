@@ -1,0 +1,25 @@
+from experiments.validators.base_validator import validator_type
+from experiments.validators.glue_validator import validate_glue
+from experiments.validators.json_schema import (
+    validate_json,
+    validate_json_with_pydantic,
+)
+from experiments.validators.multi_inst_validator import multi_inst_validator
+from experiments.validators.tool_agentic_validator import agentic_tool_validator
+
+
+def get_validator(validator: str) -> validator_type:
+    """Returns the requested validator function."""
+    # NOTE: add new validators here
+    if validator == "json_schema_validator":
+        return validate_json
+    if validator == "pydantic_schema_validator":
+        return validate_json_with_pydantic
+    if validator == "multi_inst_validator":
+        return multi_inst_validator
+    if validator == "agentic_tool_validator":
+        return agentic_tool_validator
+    if validator == "glue_validator":
+        return validate_glue
+
+    raise ValueError(f"Validator '{validator}' not recognized")
