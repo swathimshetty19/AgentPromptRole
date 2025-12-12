@@ -1,0 +1,14 @@
+{
+  "experiment": "Experiment 1: Prompt Adherence - Complex Schemas",
+  "model": "openai/gpt-4.1-mini",
+  "variants": [
+    "user_only",
+    "system_plus_user",
+    "user_plus_assistant_seed"
+  ],
+  "sample_limit": 100,
+  "timestamp": "20251103_195738",
+  "summary": {},
+  "schema_type_breakdown": {},
+  "detailed_results": []
+}

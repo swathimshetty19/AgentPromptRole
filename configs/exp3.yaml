@@ -1,0 +1,5 @@
+model: "openai/gpt-4.1-mini"
+dataset: "./datasets/agentic_tasks.jsonl"
+variants: ["assistant_history", "system_summary", "mixed", "user_only_history"]
+sample_limit: 50
+

@@ -1,0 +1,703 @@
+{
+  "experiment": "Experiment 1: Prompt Adherence",
+  "model": "openai/gpt-4.1-mini",
+  "variants": [
+    "user_only",
+    "system_plus_user",
+    "user_plus_assistant_seed"
+  ],
+  "sample_limit": 20,
+  "timestamp": "20251103_185948",
+  "summary": {
+    "user_only": {
+      "valid": 20,
+      "total": 20,
+      "percentage": 100.0,
+      "avg_extraneous_text_pct": 0.0,
+      "errors": []
+    },
+    "system_plus_user": {
+      "valid": 20,
+      "total": 20,
+      "percentage": 100.0,
+      "avg_extraneous_text_pct": 0.0,
+      "errors": []
+    },
+    "user_plus_assistant_seed": {
+      "valid": 19,
+      "total": 20,
+      "percentage": 95.0,
+      "avg_extraneous_text_pct": 0.0,
+      "errors": [
+        {
+          "sample": 11,
+          "error": "Extra data: line 1 column 84 (char 83)",
+          "extraneous_pct": 0.0,
+          "output_preview": "{\"timestamp\": \"2024-10-30T00:00:00Z\", \"level\": \"DEBUG\", \"message\": \"Cache cleared\"}{\"timestamp\": \"2024-10-30\", \"level\": \"DEBUG\", \"message\": \"Cache cleared\"}"
+        }
+      ]
+    }
+  },
+  "detailed_results": [
+    {
+      "variant": "user_only",
+      "sample_id": 1,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 86,
+      "original_length": 98,
+      "output": "```json\n{\n  \"timestamp\": \"2024-04-22\",\n  \"level\": \"ERROR\",\n  \"message\": \"Connection timeout\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 2,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 76,
+      "original_length": 88,
+      "output": "```json\n{\n  \"name\": \"John Smith\",\n  \"age\": 35,\n  \"email\": \"johnsmith123@gmail.com\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 3,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 77,
+      "original_length": 89,
+      "output": "```json\n{\n  \"timestamp\": \"2024-02-01\",\n  \"level\": \"ERROR\",\n  \"message\": \"Disk full\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 4,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 77,
+      "original_length": 89,
+      "output": "```json\n{\n  \"name\": \"Emily Davis\",\n  \"age\": 22,\n  \"email\": \"emily.d@university.edu\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 5,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 74,
+      "original_length": 86,
+      "output": "```json\n{\n  \"name\": \"Amanda White\",\n  \"age\": 26,\n  \"email\": \"amanda.w@email.com\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 6,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 72,
+      "original_length": 84,
+      "output": "```json\n{\n  \"product_name\": \"Samsung TV\",\n  \"price\": 1299,\n  \"currency\": \"USD\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 7,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 74,
+      "original_length": 86,
+      "output": "```json\n{\n  \"product_name\": \"PlayStation 5\",\n  \"price\": 499,\n  \"currency\": \"USD\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 8,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 70,
+      "original_length": 82,
+      "output": "```json\n{\n  \"product_name\": \"iPhone 15\",\n  \"price\": 999,\n  \"currency\": \"USD\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 9,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 66,
+      "original_length": 78,
+      "output": "```json\n{\"name\": \"Sarah Johnson\", \"age\": 28, \"email\": \"sarah.j@email.com\"}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 10,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 94,
+      "original_length": 106,
+      "output": "```json\n{\n  \"timestamp\": \"2024-06-12\",\n  \"level\": \"ERROR\",\n  \"message\": \"Database connection failed\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 11,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 81,
+      "original_length": 93,
+      "output": "```json\n{\n  \"timestamp\": \"2024-10-30\",\n  \"level\": \"DEBUG\",\n  \"message\": \"Cache cleared\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 12,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 72,
+      "original_length": 84,
+      "output": "```json\n{\n  \"product_name\": \"Apple Watch\",\n  \"price\": 399,\n  \"currency\": \"USD\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 13,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 86,
+      "original_length": 98,
+      "output": "```json\n{\n  \"timestamp\": \"2024-05-08\",\n  \"level\": \"DEBUG\",\n  \"message\": \"Processing request\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 14,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 74,
+      "original_length": 86,
+      "output": "```json\n{\n  \"product_name\": \"PlayStation 5\",\n  \"price\": 499,\n  \"currency\": \"USD\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 15,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 79,
+      "original_length": 91,
+      "output": "```json\n{\n  \"name\": \"Michael Brown\",\n  \"age\": 45,\n  \"email\": \"mike.brown@company.com\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 16,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 74,
+      "original_length": 86,
+      "output": "```json\n{\n  \"product_name\": \"PlayStation 5\",\n  \"price\": 499,\n  \"currency\": \"USD\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 17,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 72,
+      "original_length": 84,
+      "output": "```json\n{\n  \"product_name\": \"AirPods Pro\",\n  \"price\": 249,\n  \"currency\": \"USD\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 18,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 77,
+      "original_length": 89,
+      "output": "```json\n{\n  \"timestamp\": \"2024-02-01\",\n  \"level\": \"ERROR\",\n  \"message\": \"Disk full\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 19,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 74,
+      "original_length": 86,
+      "output": "```json\n{\n  \"name\": \"Robert Taylor\",\n  \"age\": 38,\n  \"email\": \"robert.t@work.com\"\n}\n```"
+    },
+    {
+      "variant": "user_only",
+      "sample_id": 20,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 76,
+      "original_length": 88,
+      "output": "```json\n{\n  \"name\": \"David Miller\",\n  \"age\": 52,\n  \"email\": \"david.m@business.org\"\n}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 1,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 86,
+      "original_length": 98,
+      "output": "```json\n{\n  \"timestamp\": \"2024-04-22\",\n  \"level\": \"ERROR\",\n  \"message\": \"Connection timeout\"\n}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 2,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 68,
+      "original_length": 80,
+      "output": "```json\n{\"name\": \"John Smith\", \"age\": 35, \"email\": \"johnsmith123@gmail.com\"}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 3,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 77,
+      "original_length": 89,
+      "output": "```json\n{\n  \"timestamp\": \"2024-02-01\",\n  \"level\": \"ERROR\",\n  \"message\": \"Disk full\"\n}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 4,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 64,
+      "original_length": 76,
+      "output": "```json\n{\"name\":\"Emily Davis\",\"age\":22,\"email\":\"emily.d@university.edu\"}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 5,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 61,
+      "original_length": 73,
+      "output": "```json\n{\"name\":\"Amanda White\",\"age\":26,\"email\":\"amanda.w@email.com\"}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 6,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 62,
+      "original_length": 74,
+      "output": "```json\n{\"product_name\": \"Samsung TV\", \"price\": 1299, \"currency\": \"$\"}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 7,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 61,
+      "original_length": 73,
+      "output": "```json\n{\"product_name\":\"PlayStation 5\",\"price\":499,\"currency\":\"USD\"}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 8,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 57,
+      "original_length": 69,
+      "output": "```json\n{\"product_name\":\"iPhone 15\",\"price\":999,\"currency\":\"USD\"}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 9,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 61,
+      "original_length": 73,
+      "output": "```json\n{\"name\":\"Sarah Johnson\",\"age\":28,\"email\":\"sarah.j@email.com\"}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 10,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 94,
+      "original_length": 106,
+      "output": "```json\n{\n  \"timestamp\": \"2024-06-12\",\n  \"level\": \"ERROR\",\n  \"message\": \"Database connection failed\"\n}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 11,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 81,
+      "original_length": 93,
+      "output": "```json\n{\n  \"timestamp\": \"2024-10-30\",\n  \"level\": \"DEBUG\",\n  \"message\": \"Cache cleared\"\n}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 12,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 42,
+      "original_length": 54,
+      "output": "```json\n{\"product_name\":\"Apple Watch\",\"price\":399}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 13,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 86,
+      "original_length": 98,
+      "output": "```json\n{\n  \"timestamp\": \"2024-05-08\",\n  \"level\": \"DEBUG\",\n  \"message\": \"Processing request\"\n}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 14,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 61,
+      "original_length": 73,
+      "output": "```json\n{\"product_name\":\"PlayStation 5\",\"price\":499,\"currency\":\"USD\"}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 15,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 71,
+      "original_length": 83,
+      "output": "```json\n{\"name\": \"Michael Brown\", \"age\": 45, \"email\": \"mike.brown@company.com\"}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 16,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 44,
+      "original_length": 56,
+      "output": "```json\n{\"product_name\":\"PlayStation 5\",\"price\":499}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 17,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 59,
+      "original_length": 71,
+      "output": "```json\n{\"product_name\":\"AirPods Pro\",\"price\":249,\"currency\":\"USD\"}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 18,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 77,
+      "original_length": 89,
+      "output": "```json\n{\n  \"timestamp\": \"2024-02-01\",\n  \"level\": \"ERROR\",\n  \"message\": \"Disk full\"\n}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 19,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 66,
+      "original_length": 78,
+      "output": "```json\n{\"name\": \"Robert Taylor\", \"age\": 38, \"email\": \"robert.t@work.com\"}\n```"
+    },
+    {
+      "variant": "system_plus_user",
+      "sample_id": 20,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 68,
+      "original_length": 80,
+      "output": "```json\n{\"name\": \"David Miller\", \"age\": 52, \"email\": \"david.m@business.org\"}\n```"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 1,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 78,
+      "original_length": 78,
+      "output": "{\"timestamp\": \"2024-04-22\", \"level\": \"ERROR\", \"message\": \"Connection timeout\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 2,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 68,
+      "original_length": 68,
+      "output": "{\"name\": \"John Smith\", \"age\": 35, \"email\": \"johnsmith123@gmail.com\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 3,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 69,
+      "original_length": 69,
+      "output": "{\"timestamp\": \"2024-02-01\", \"level\": \"ERROR\", \"message\": \"Disk full\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 4,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 69,
+      "original_length": 69,
+      "output": "{\"name\": \"Emily Davis\", \"age\": 22, \"email\": \"emily.d@university.edu\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 5,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 66,
+      "original_length": 66,
+      "output": "{\"name\": \"Amanda White\", \"age\": 26, \"email\": \"amanda.w@email.com\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 6,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 72,
+      "original_length": 72,
+      "output": "{\n  \"product_name\": \"Samsung TV\",\n  \"price\": 1299,\n  \"currency\": \"USD\"\n}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 7,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 66,
+      "original_length": 66,
+      "output": "{\"product_name\": \"PlayStation 5\", \"price\": 499, \"currency\": \"USD\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 8,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 62,
+      "original_length": 62,
+      "output": "{\"product_name\": \"iPhone 15\", \"price\": 999, \"currency\": \"USD\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 9,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 66,
+      "original_length": 66,
+      "output": "{\"name\": \"Sarah Johnson\", \"age\": 28, \"email\": \"sarah.j@email.com\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 10,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 86,
+      "original_length": 86,
+      "output": "{\"timestamp\": \"2024-06-12\", \"level\": \"ERROR\", \"message\": \"Database connection failed\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 11,
+      "task_description": "Normalize a log entry.",
+      "valid": false,
+      "error": "Extra data: line 1 column 84 (char 83)",
+      "extraneous_text_pct": 0.0,
+      "json_length": 0,
+      "original_length": 156,
+      "output": "{\"timestamp\": \"2024-10-30T00:00:00Z\", \"level\": \"DEBUG\", \"message\": \"Cache cleared\"}{\"timestamp\": \"2024-10-30\", \"level\": \"DEBUG\", \"message\": \"Cache cleared\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 12,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 59,
+      "original_length": 59,
+      "output": "{\"product_name\":\"Apple Watch\",\"price\":399,\"currency\":\"USD\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 13,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 78,
+      "original_length": 78,
+      "output": "{\"timestamp\": \"2024-05-08\", \"level\": \"DEBUG\", \"message\": \"Processing request\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 14,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 66,
+      "original_length": 66,
+      "output": "{\"product_name\": \"PlayStation 5\", \"price\": 499, \"currency\": \"USD\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 15,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 71,
+      "original_length": 71,
+      "output": "{\"name\": \"Michael Brown\", \"age\": 45, \"email\": \"mike.brown@company.com\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 16,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 74,
+      "original_length": 86,
+      "output": "```json\n{\n  \"product_name\": \"PlayStation 5\",\n  \"price\": 499,\n  \"currency\": \"USD\"\n}\n```"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 17,
+      "task_description": "Convert product info into structured JSON.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 64,
+      "original_length": 64,
+      "output": "{\"product_name\": \"AirPods Pro\", \"price\": 249, \"currency\": \"USD\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 18,
+      "task_description": "Normalize a log entry.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 74,
+      "original_length": 74,
+      "output": "{\"timestamp\":\"2024-02-01T00:00:00Z\",\"level\":\"ERROR\",\"message\":\"Disk full\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 19,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 66,
+      "original_length": 66,
+      "output": "{\"name\": \"Robert Taylor\", \"age\": 38, \"email\": \"robert.t@work.com\"}"
+    },
+    {
+      "variant": "user_plus_assistant_seed",
+      "sample_id": 20,
+      "task_description": "Extract a user profile from the text.",
+      "valid": true,
+      "error": "",
+      "extraneous_text_pct": 0.0,
+      "json_length": 68,
+      "original_length": 68,
+      "output": "{\"name\": \"David Miller\", \"age\": 52, \"email\": \"david.m@business.org\"}"
+    }
+  ]
+}

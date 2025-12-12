@@ -1,0 +1,14 @@
+{
+  "experiment": "Experiment 3: Agentic Decision-Making with Long Context",
+  "model": "openai/gpt-4.1-mini",
+  "variants": [
+    "assistant_history",
+    "system_summary",
+    "mixed",
+    "user_only_history"
+  ],
+  "sample_limit": 50,
+  "timestamp": "20251211_211520",
+  "summary": {},
+  "detailed_results": []
+}
