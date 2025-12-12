@@ -4,6 +4,7 @@ experiment_name: multi_turn_simple_test
 
 # Models to test
 models:
+  - "qwen/qwen-turbo"
   - "chatopenai/gpt-4.1-mini-2025-04-14"
 
 # Dataset configuration
@@ -23,6 +24,7 @@ builders:
   - multi_turn_user_only
   - multi_turn_user_with_assistant_markdown_history
   - multi_turn_user_with_assistant_explanation_history
+  - multi_turn_user_with_assistant_extra_fake_fields
 
 # Use the existing toolbench validator
 validator: multi_inst_validator

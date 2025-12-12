@@ -153,3 +153,38 @@ def user_with_assistant_explanation_history(
             "content": USER_PART.format(schema_str=schema_str, query_text=query_text),
         },
     ]
+
+# 3) Assistant introduces extra fake fields not in the schema
+def user_with_assistant_extra_fake_fields(query_text: str, api_schema_definition: dict[str, Any]) -> list[Message]:
+    """
+    Multi-turn sequence where assistant returns a JSON that contains extra fields
+    (fake fields) that are NOT in the schema. The final user query should be used
+    to produce the real args and ignore these fake keys.
+    """
+    schema_str = _format_schema_for_prompt(api_schema_definition)
+    seed_args = _build_seed_args(api_schema_definition)
+
+    # Add some plausible-looking fake fields to the assistant seed json
+    fake_fields = {
+        "__FAKE_CONFIDENCE__": 0.98,
+        "__FAKE_FEATURE_FLAG__": True,
+        "debug_info": "__FAKE_DEBUG__",
+    }
+    seed_with_fakes = {**seed_args, **fake_fields}
+
+    return [
+        {
+            "role": "user",
+            "content": SYSTEM_PART + USER_PART.format(schema_str=schema_str, query_text="Dummy query to set context"),
+        },
+        {
+            # Assistant returns a JSON containing both seed args and fake fields
+            "role": "assistant",
+            "content": "```json\n" + json.dumps(seed_with_fakes, indent=2) + "\n```",
+        },
+        {
+            "role": "user",
+            "content": USER_PART.format(schema_str=schema_str, query_text=query_text),
+        },
+    ]
+
