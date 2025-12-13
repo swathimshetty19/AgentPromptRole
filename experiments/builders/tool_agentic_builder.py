@@ -106,7 +106,7 @@ def agent_chain_tools(
     system_text = (
         "You are an LLM agent that must decide the next tool call given the user query and prior tool outputs.\n"
         "Only choose from the provided tool names.\n"
-        + SYSTEM_PART
+        "Reply with ONLY the tool name. You can use one of these formats:\n- Plain text: \"ToolName\"\n- Simple JSON: {\"tool\":\"ToolName\"}\n\nDo NOT include parameters, arguments, or any other fields. Only the tool name is needed."
     )
     messages.append({"role": "system", "content": system_text})
 
@@ -123,8 +123,6 @@ def agent_chain_tools(
         # assistant memory update summarizing that tool call
         messages.append({"role": "assistant", "content": f"Memory Update: tool_called={tool_name}"})
 
-    # final assistant prompt: ask for the next tool name
-    messages.append({"role": "assistant", "content": "Current State: given the above tool calls, provide the NEXT tool name to call.\n\nIMPORTANT: Reply with ONLY the tool name. You can use one of these formats:\n- Plain text: \"ToolName\"\n- Simple JSON: {\"tool\":\"ToolName\"}\n\nDo NOT include parameters, arguments, or any other fields. Only the tool name is needed."})
     return messages
 
 
@@ -143,9 +141,9 @@ def agent_chain_assistant_style(
         "You are an LLM agent that must decide the next tool call given the user query and prior assistant-tool steps.\n"
         "Assume each listed assistant line corresponds to a successful tool call and you have its answer.\n"
         "Only choose from the provided tool names.\n"
-        + SYSTEM_PART
+        "Reply with ONLY the tool name. You can use one of these formats:\n- Plain text: \"ToolName\"\n- Simple JSON: {\"tool\":\"ToolName\"}\n\nDo NOT include parameters, arguments, or any other fields. Only the tool name is needed."
     )
-    messages.append({"role": "system", "content": system_text})
+    messages.append({"role": "user", "content": system_text})
     messages.append(
         {
             "role": "user",
@@ -154,7 +152,6 @@ def agent_chain_assistant_style(
     )
 
     for tool_name in prior_calls:
-        messages.append({"role": "assistant", "content": f"ToolCall: {tool_name}"})
+        messages.append({"role": "assistant", "content": f"Memory Update: tool_called= {tool_name}"})
 
-    messages.append({"role": "assistant", "content": "Current State: provide the NEXT tool name to call."})
     return messages
