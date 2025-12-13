@@ -43,8 +43,8 @@ ALL_BUILDERS: dict[str, builder_type] = {
     "multi_turn_user_with_assistant_markdown_history": toolbench_user_with_assistant_markdown_history,
     "multi_turn_user_with_assistant_explanation_history": toolbench_user_with_assistant_explanation_history,
     "multi_turn_user_with_assistant_extra_fake_fields": toolbench_user_with_assistant_extra_fake_fields,
-    "agent_chain_tools": agent_chain_tools,
-    "agent_chain_assistant_style": agent_chain_assistant_style,
+    "system_plus_user_assistant_seed": agent_chain_tools,
+    "user_plus_assistant": agent_chain_assistant_style,
 }
 
 

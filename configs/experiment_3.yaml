@@ -20,7 +20,7 @@ dataset:
     - api_schema_definition
 
 builders:
-  - "agent_chain_tools"
-  - "agent_chain_assistant_style"
+  - "system_plus_user_assistant_seed"
+  - "user_plus_assistant"
 
 validator: "agentic_tool_validator"
