@@ -68,8 +68,20 @@ def _extract_tool_from_json_text(text: str) -> Optional[str]:
     5. Keyword heuristics
     """
     import re
-    
+
+    # Handle quoted plain-text tool names early
+    if (
+        text.startswith('"') and text.endswith('"')
+        or text.startswith("'") and text.endswith("'")
+    ):
+        stripped = text[1:-1].strip()
+        if stripped and stripped != "_name" and not stripped.startswith("_"):
+            return stripped
+
+
     text = text.strip()
+
+
     
     # Remove markdown code blocks if present
     text = re.sub(r"^```(?:json)?\s*\n?", "", text, flags=re.MULTILINE)
@@ -80,6 +92,21 @@ def _extract_tool_from_json_text(text: str) -> Optional[str]:
     try:
         # Try parsing the whole text
         parsed = json.loads(text)
+        if isinstance(parsed, str):
+            parsed = parsed.strip()
+            if parsed and parsed != "_name" and not parsed.startswith("_"):
+                return parsed
+
+        if isinstance(parsed, dict):
+            result = _extract_tool_from_dict(parsed)
+            if result:
+                return result
+
+        if isinstance(parsed, list) and parsed and isinstance(parsed[0], dict):
+            result = _extract_tool_from_dict(parsed[0])
+            if result:
+                return result
+
         if isinstance(parsed, dict):
             result = _extract_tool_from_dict(parsed)
             if result:
